@@ -6,7 +6,7 @@
 ## Linux排程
 建議不要再00:00的時候執行，避免網路延遲導致無法簽到
 ```
-5 0 * * * python3 /home/kltw/bot/gamerautosign.py > /dev/null 2>&1
+5 0 * * * python3 <your path>/gamerautosign.py > /dev/null 2>&1
 ```
 
 ## 待加入的功能
