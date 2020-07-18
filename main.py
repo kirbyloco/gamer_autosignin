@@ -10,13 +10,11 @@ def _autosign(baseLogin):
         'https://www.gamer.com.tw/ajax/get_csrf_token.php').text
     jsoninfo = baseLogin.post(
         'https://www.gamer.com.tw/ajax/signin.php', data={'action': '1', 'token': token})
-    jsoninfo2 = baseLogin.post(
-        'https://www.gamer.com.tw/ajax/signin.php', data={'action': '2'})
     jsoninfo = jsoninfo.json()
-    jsoninfo2 = jsoninfo2.json()
-    print(token)
-    if jsoninfo['message'] == '簽到成功':
-        print(f'簽到成功，已簽到 {str(jsoninfo2["days"])} 天')
+    if 'data' in jsoninfo:
+        print(f'巴哈姆特自動簽到成功!!\n已簽到第 {str(jsoninfo["data"]["days"])} 天')
+    else:
+        print('簽到失敗')
 
 
 def _login(data):
