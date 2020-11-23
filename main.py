@@ -1,14 +1,17 @@
-import requests
 import os
+import re
+import time
+
+import requests
 from configobj import ConfigObj
 
 config = ConfigObj(os.getcwd() + "/config.conf")['Account']
 
 
-def _autosign(baseLogin):
-    token = baseLogin.get(
+def _autosign(sess):
+    token = sess.get(
         'https://www.gamer.com.tw/ajax/get_csrf_token.php').text
-    jsoninfo = baseLogin.post(
+    jsoninfo = sess.post(
         'https://www.gamer.com.tw/ajax/signin.php', data={'action': '1', 'token': token})
     jsoninfo = jsoninfo.json()
     if 'data' in jsoninfo:
@@ -17,9 +20,33 @@ def _autosign(baseLogin):
         print('簽到失敗')
 
 
+def _autoanswer(sess):
+    snweb = sess.get(
+        'https://api.gamer.com.tw/mobile_app/bahamut/v1/home.php?owner=blackXblue&page=1')
+    sn = snweb.json()['creation'][0]['sn']
+    answeb = sess.get(
+        'https://api.gamer.com.tw/mobile_app/bahamut/v1/home_creation_detail.php?sn=' + str(sn))
+    ans = re.findall(r"A:(\d)<", answeb.json()['content'])[0]
+    tokenweb = sess.get(
+        'https://ani.gamer.com.tw/ajax/animeGetQuestion.php?t=' + str(int(time.time() * 1000)))
+    token = tokenweb.json()['token']
+    data = {
+        'token': token,
+        'ans': ans,
+        't': str(int(time.time() * 1000))
+    }
+    c = sess.post(
+        'https://ani.gamer.com.tw/ajax/animeAnsQuestion.php', data=data)
+    jsoninfo = c.json()
+    if jsoninfo['ok'] == 1:
+        print(jsoninfo['gift'])
+    else:
+        print('答案錯誤')
+
+
 def _login(data):
-    baseLogin = requests.session()
-    baseLogin.headers.update(
+    sess = requests.session()
+    sess.headers.update(
         {
             'user-agent': 'Bahadroid (https://www.gamer.com.tw/)',
             'x-bahamut-app-instanceid': 'cc2zQIfDpg4',
@@ -32,18 +59,18 @@ def _login(data):
         },
     )
 
-    account = baseLogin.post(
+    account = sess.post(
         'https://api.gamer.com.tw/mobile_app/user/v3/do_login.php', data=data)
     account_f = account.json()
-    baseLogin.headers = {
+    sess.headers = {
         'user-agent': 'Bahadroid (https://www.gamer.com.tw/)',
         'x-bahamut-app-instanceid': 'cc2zQIfDpg4',
         'x-bahamut-app-android': 'tw.com.gamer.android.activecenter',
         'x-bahamut-app-version': '251',
         'accept-encoding': 'gzip'
     }
-    _autosign(baseLogin)
-
+    _autosign(sess)
+    _autoanswer(sess)
 
 if __name__ == "__main__":
     data = {
