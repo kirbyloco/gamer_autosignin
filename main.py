@@ -9,7 +9,8 @@ config = ConfigObj(os.getcwd() + "/config.conf")['Account']
 
 
 def _autosign(sess):
-    signinfo = sess.post('https://www.gamer.com.tw/ajax/signin.php', data={'action': '2'}).json()
+    signinfo = sess.post(
+        'https://www.gamer.com.tw/ajax/signin.php', data={'action': '2'}).json()
     if signinfo['data']['signin'] == 1:
         return
     token = sess.get(
@@ -21,9 +22,13 @@ def _autosign(sess):
         print(f'巴哈姆特自動簽到成功!!\n已簽到第 {str(jsoninfo["data"]["days"])} 天')
     else:
         print('簽到失敗')
-    sess.post('https://api.gamer.com.tw/mobile_app/bahamut/v1/sign_in_ad_start.php')
+    sess.cookies.set('ckBahamutCsrfToken',
+                     token[:16], domain='.gamer.com.tw', secure=True)
+    sess.post('https://api.gamer.com.tw/mobile_app/bahamut/v1/sign_in_ad_start.php',
+              headers={'X-Bahamut-Csrf-Token': token[:16]})
     time.sleep(30)
-    sess.post('https://api.gamer.com.tw/mobile_app/bahamut/v1/sign_in_ad_finished.php')
+    sess.post('https://api.gamer.com.tw/mobile_app/bahamut/v1/sign_in_ad_finished.php',
+              headers={'X-Bahamut-Csrf-Token': token[:16]})
 
 
 def _autoanswer(sess):
