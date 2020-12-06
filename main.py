@@ -55,6 +55,15 @@ def _autoanswer(sess):
         print('答案錯誤')
 
 
+def _guildsign(sess):
+    guildtext = sess.get(
+        'https://api.gamer.com.tw/ajax/common/topBar.php?type=forum').text
+    for _sn in re.findall(r'guild\.php\?sn=(\d*)', guildtext):
+        jsoninfo = sess.post(
+            'https://guild.gamer.com.tw/ajax/guildSign.php', data={'sn': _sn}).json()
+        print(jsoninfo['msg'])
+
+
 def _login(data):
     sess = requests.session()
     sess.headers.update(
@@ -82,6 +91,8 @@ def _login(data):
     }
     _autosign(sess)
     _autoanswer(sess)
+    _guildsign(sess)
+
 
 if __name__ == "__main__":
     data = {
