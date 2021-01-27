@@ -13,6 +13,9 @@
 10 0 * * * python3 <your path>/main.py > /dev/null 2>&1
 ```
 
+## 抽勇者福利社(廣告)
+請使用screen或systemd等工具在背景執行
+
 ## 已加入的功能
 自動簽到 2019-11-14
 
