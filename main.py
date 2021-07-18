@@ -40,7 +40,10 @@ def _autoanswer(sess):
     ans = re.findall(r"A:(\d)<", answeb.json()['content'])[0]
     tokenweb = sess.get(
         'https://ani.gamer.com.tw/ajax/animeGetQuestion.php?t=' + str(int(time.time() * 1000)))
-    token = tokenweb.json()['token']
+    token = tokenweb.json().get('token')
+    if token is None:
+        print('Missing token. Body: {}'.format(tokenweb.json()))
+        return
     data = {
         'token': token,
         'ans': ans,
