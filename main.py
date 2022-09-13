@@ -3,9 +3,10 @@ import re
 import time
 
 import requests
-from configobj import ConfigObj
+import json
 
-config = ConfigObj(os.getcwd() + "/config.conf")['Account']
+with open(os.getcwd() + "/config.json", "r", encoding="utf-8") as f:
+    config = json.load(f)
 
 
 def _autosign(sess):
@@ -99,8 +100,8 @@ def _login(data):
 
 if __name__ == "__main__":
     data = {
-        'uid': config['UID'],
-        'passwd': config['PASSWD'],
+        'uid': config['account']['username'],
+        'passwd': config['account']['password'],
         'vcode': '7045'
     }
     _login(data)

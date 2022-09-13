@@ -10,11 +10,34 @@
 
 所以排程建議設在00:10之後
 ```
-10 0 * * * python3 <your path>/main.py > /dev/null 2>&1
+10 0 * * * python3 <your path>/main.py
 ```
 
 ## 抽勇者福利社(廣告)
-請使用screen或systemd等工具在背景執行
+### Service
+```ini
+[Unit]
+Description=巴哈自動抽獎
+
+[Service]
+User = <ssh使用者帳號>
+WorkingDirectory = <路徑>
+ExecStart = /usr/bin/python3 <lottery.py的路徑>
+```
+
+### Timer
+```ini
+[Unit]
+Description=巴哈自動抽獎計時器
+
+[Timer]
+Unit=lottery.service
+OnCalendar = *-*-* 00:10:00
+OnCalendar = *-*-* 12:10:00
+
+[Install]
+WantedBy= multi-user.target
+```
 
 ## 已加入的功能
 自動簽到 2019-11-14
@@ -26,21 +49,8 @@
 自動抽勇者福利社的獎品(廣告) 2021-01-22 新增
 
 ## config檔設定
+將config_default.json重新命名為config.json
 使用記事本等工具打開，並填入相關的資料
-
-|Account|登入用|
-|-|-|
-|UID|使用者帳號|
-|PASSWD|密碼|
-
-|Lottery|抽獎用|
-|-|-|
-|name|真實姓名|
-|tel|手機電話|
-|zip|郵遞區號|
-|city|城市|
-|country|鄉鎮區|
-|address|地址|
 
 ## 待加入的功能
 自動回答勇者福利社的問題

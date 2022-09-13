@@ -1,0 +1,14 @@
+{
+    "account": {
+        "username": "",
+        "password": ""
+    },
+    "lottery": {
+        "name": "",
+        "tel": "",
+        "zipcode": "",
+        "city": "",
+        "country": "",
+        "address": ""
+    }
+}

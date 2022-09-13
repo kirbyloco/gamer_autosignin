@@ -1,0 +1,4 @@
+chromedriver_autoinstaller
+httpx
+selenium
+pyvirtualdisplay
