@@ -39,7 +39,17 @@ driver = webdriver.Chrome(options=chrome_options)
 logging.info('等待Chrome初始化完成')
 
 time.sleep(3)
-
+driver.get(
+    'chrome-extension://mpbjkejclgfgadiemmefgebjfooflfhl/src/options/index.html')
+time.sleep(3)
+driver.find_elements(By.CLASS_NAME, 'mdc-select__selected-text')[-1].click()
+driver.find_element(By.XPATH, '//li[@data-value="witSpeechApi"]').click()
+driver.find_elements(By.CLASS_NAME, 'mdc-select__selected-text')[-1].click()
+driver.find_element(By.XPATH, '//li[@data-value="english"]').click()
+driver.find_elements(
+    By.XPATH, '//button[@class="mdc-button mdc-button--outlined mdc-ripple-upgraded"]')[-1].click()
+driver.find_elements(
+    By.XPATH, '//input[@class="mdc-text-field__input"]')[-1].send_keys(config['Buster_Api'])
 driver.get('https://gamer.com.tw')
 
 sess = httpx.Client()

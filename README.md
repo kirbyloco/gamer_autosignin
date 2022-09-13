@@ -52,5 +52,11 @@ WantedBy= multi-user.target
 將config_default.json重新命名為config.json
 使用記事本等工具打開，並填入相關的資料
 
+## Buster插件API申請
+1. 到[wit.ai](https://wit.ai/)
+2. 點New App，並填入相關資料
+3. 進到申請的APP，進入設定
+4. 將Server Access Token填入config.json的Buster_Api
+
 ## 待加入的功能
 自動回答勇者福利社的問題
