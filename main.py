@@ -62,7 +62,7 @@ def _autoanswer(sess):
 def _guildsign(sess):
     guildtext = sess.get(
         'https://api.gamer.com.tw/ajax/common/topBar.php?type=forum').text
-    for _sn in re.findall(r'guild\.php\?sn=(\d*)', guildtext):
+    for _sn in re.findall(r'guild\.php\?gsn=(\d*)', guildtext):
         jsoninfo = sess.post(
             'https://guild.gamer.com.tw/ajax/guildSign.php', data={'sn': _sn}).json()
         print(jsoninfo['msg'])
